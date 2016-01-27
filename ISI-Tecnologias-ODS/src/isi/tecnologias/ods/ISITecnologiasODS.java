@@ -43,6 +43,7 @@ public class ISITecnologiasODS {
             String nomeDoInvestigador;
             double numerosCapitulos=0;
             double numerosLivros=0;
+            double numerosRevista=0;
             
             for (int i=0; i < InvestigadoresNodeList.getLength(); i++) {
                 nomeDoInvestigador = InvestigadoresNodeList.item(i).getFirstChild().getNodeValue();         
@@ -52,7 +53,8 @@ public class ISITecnologiasODS {
                 conferenciaIndexada = (double) XPathFactory.newInstance().newXPath().compile("count(//CURRICULO-VITAE/DADOS-GERAIS[@NOME-COMPLETO='"+nomeDoInvestigador+"']/../PRODUCAO-TECNICA/DEMAIS-TIPOS-DE-PRODUCAO-TECNICA/APRESENTACAO-DE-TRABALHO/DADOS-BASICOS-DA-APRESENTACAO-DE-TRABALHO[@NATUREZA='CONFERENCIA']/..)").evaluate(CvAllXMLDoc, XPathConstants.NUMBER);
                 numerosCapitulos = (double) XPathFactory.newInstance().newXPath().compile("count(//CURRICULO-VITAE/DADOS-GERAIS[@NOME-COMPLETO='"+nomeDoInvestigador+"']/../PRODUCAO-BIBLIOGRAFICA/LIVROS-E-CAPITULOS/CAPITULOS-DE-LIVROS-PUBLICADOS)").evaluate(CvAllXMLDoc, XPathConstants.NUMBER);
                 numerosLivros = (double) XPathFactory.newInstance().newXPath().compile("count(//CURRICULO-VITAE/DADOS-GERAIS[@NOME-COMPLETO='"+nomeDoInvestigador+"']/../PRODUCAO-BIBLIOGRAFICA/LIVROS-E-CAPITULOS/LIVROS-PUBLICADOS-OU-ORGANIZADOS)").evaluate(CvAllXMLDoc, XPathConstants.NUMBER);
-                //PARTICIPACAO-EDITORIAL-EM-REVISTA
+                numerosRevista = (double) XPathFactory.newInstance().newXPath().compile("count(//CURRICULO-VITAE/DADOS-GERAIS[@NOME-COMPLETO='"+nomeDoInvestigador+"']/../DADOS-COMPLEMENTARES/PARTICIPACAO-EDITORIAL-EM-REVISTAS/PARTICIPACAO-EDITORIAL-EM-REVISTA)").evaluate(CvAllXMLDoc, XPathConstants.NUMBER);
+                
                 factorMedio= factorMedio/contarTrabalhosFactor;
                 if (contarTrabalhosFactor==0)
                     factorMedio=0;
@@ -63,6 +65,8 @@ public class ISITecnologiasODS {
                 Cell cell5 = folhaNova.getCellByPosition(12,i+5);
                 Cell cell6 = folhaNova.getCellByPosition(13,i+5);
                 Cell cell7 = folhaNova.getCellByPosition(14,i+5);
+                Cell cell8 = folhaNova.getCellByPosition(15,i+5);
+                
                 
                 cell1.setStringValue(nomeDoInvestigador);
                 cell2.setDoubleValue(contarTrabalhosFactor);
@@ -71,6 +75,7 @@ public class ISITecnologiasODS {
                 cell5.setDoubleValue(conferenciaIndexada);
                 cell6.setDoubleValue(numerosCapitulos);
                 cell7.setDoubleValue(numerosLivros);
+                cell8.setDoubleValue(numerosRevista);
             }            
             System.out.println("A gravar folha " + ODSFolder+"/"+odsFile);
             outputOds.save(ODSFolder+"/"+odsFile);
