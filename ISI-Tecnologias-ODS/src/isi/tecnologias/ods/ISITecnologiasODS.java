@@ -44,6 +44,11 @@ public class ISITecnologiasODS {
             double numerosCapitulos=0;
             double numerosLivros=0;
             double numerosRevista=0;
+            double projectosInvestigadorResponsavel;
+            double projectosInvestigadorParticipante;
+            double registoPatenteConcedida;
+            double patentesComercializadas;
+            
             
             for (int i=0; i < InvestigadoresNodeList.getLength(); i++) {
                 nomeDoInvestigador = InvestigadoresNodeList.item(i).getFirstChild().getNodeValue();         
@@ -54,10 +59,18 @@ public class ISITecnologiasODS {
                 numerosCapitulos = (double) XPathFactory.newInstance().newXPath().compile("count(//CURRICULO-VITAE/DADOS-GERAIS[@NOME-COMPLETO='"+nomeDoInvestigador+"']/../PRODUCAO-BIBLIOGRAFICA/LIVROS-E-CAPITULOS/CAPITULOS-DE-LIVROS-PUBLICADOS)").evaluate(CvAllXMLDoc, XPathConstants.NUMBER);
                 numerosLivros = (double) XPathFactory.newInstance().newXPath().compile("count(//CURRICULO-VITAE/DADOS-GERAIS[@NOME-COMPLETO='"+nomeDoInvestigador+"']/../PRODUCAO-BIBLIOGRAFICA/LIVROS-E-CAPITULOS/LIVROS-PUBLICADOS-OU-ORGANIZADOS)").evaluate(CvAllXMLDoc, XPathConstants.NUMBER);
                 numerosRevista = (double) XPathFactory.newInstance().newXPath().compile("count(//CURRICULO-VITAE/DADOS-GERAIS[@NOME-COMPLETO='"+nomeDoInvestigador+"']/../DADOS-COMPLEMENTARES/PARTICIPACAO-EDITORIAL-EM-REVISTAS/PARTICIPACAO-EDITORIAL-EM-REVISTA)").evaluate(CvAllXMLDoc, XPathConstants.NUMBER);
+                projectosInvestigadorResponsavel = (double) XPathFactory.newInstance().newXPath().compile("count(//CURRICULO-VITAE/DADOS-GERAIS[@NOME-COMPLETO='"+nomeDoInvestigador+"']/../DADOS-GERAIS/ATUACOES-PROFISSIONAIS/ATUACAO-PROFISSIONAL/ATIVIDADES-DE-PARTICIPACAO-EM-PROJETO/PARTICIPACAO-EM-PROJETO/PROJETO-DE-PESQUISA[@PAPEL-DO-INVESTIGADOR='Investigador responsável']/..)").evaluate(CvAllXMLDoc, XPathConstants.NUMBER);
+                projectosInvestigadorParticipante = (double) XPathFactory.newInstance().newXPath().compile("count(//CURRICULO-VITAE/DADOS-GERAIS[@NOME-COMPLETO='"+nomeDoInvestigador+"']/../DADOS-GERAIS/ATUACOES-PROFISSIONAIS/ATUACAO-PROFISSIONAL/ATIVIDADES-DE-PARTICIPACAO-EM-PROJETO/PARTICIPACAO-EM-PROJETO/PROJETO-DE-PESQUISA[@PAPEL-DO-INVESTIGADOR='Investigador']/..)").evaluate(CvAllXMLDoc, XPathConstants.NUMBER);
+                registoPatenteConcedida=(double) XPathFactory.newInstance().newXPath().compile("count(//CURRICULO-VITAE/DADOS-GERAIS[@NOME-COMPLETO='"+nomeDoInvestigador+"']/../PRODUCAO-TECNICA/SOFTWARE/DETALHAMENTO-DO-SOFTWARE/REGISTRO-OU-PATENTE)").evaluate(CvAllXMLDoc, XPathConstants.NUMBER);
+                patentesComercializadas=(double) XPathFactory.newInstance().newXPath().compile("count(//CURRICULO-VITAE/DADOS-GERAIS[@NOME-COMPLETO='"+nomeDoInvestigador+"']/../PRODUCAO-TECNICA/SOFTWARE/DETALHAMENTO-DO-SOFTWARE/REGISTRO-OU-PATENTE)").evaluate(CvAllXMLDoc, XPathConstants.NUMBER);;
                 
                 factorMedio= factorMedio/contarTrabalhosFactor;
                 if (contarTrabalhosFactor==0)
+                {
                     factorMedio=0;
+                }
+                
+                    
                 Cell cell1 = folhaNova.getCellByPosition(1,i+5);
                 Cell cell2 = folhaNova.getCellByPosition(10,i+5);
                 Cell cell3 = folhaNova.getCellByPosition(11,i+5);
@@ -66,7 +79,10 @@ public class ISITecnologiasODS {
                 Cell cell6 = folhaNova.getCellByPosition(13,i+5);
                 Cell cell7 = folhaNova.getCellByPosition(14,i+5);
                 Cell cell8 = folhaNova.getCellByPosition(15,i+5);
-                
+                Cell cell9 = folhaNova.getCellByPosition(20,i+5);
+                Cell cell10 = folhaNova.getCellByPosition(21,i+5);
+                Cell cell11 = folhaNova.getCellByPosition (26,i+5);
+                Cell cell12= folhaNova.getCellByPosition(27,i+5);
                 
                 cell1.setStringValue(nomeDoInvestigador);
                 cell2.setDoubleValue(contarTrabalhosFactor);
@@ -76,6 +92,10 @@ public class ISITecnologiasODS {
                 cell6.setDoubleValue(numerosCapitulos);
                 cell7.setDoubleValue(numerosLivros);
                 cell8.setDoubleValue(numerosRevista);
+                cell9.setDoubleValue(projectosInvestigadorResponsavel);
+                cell10.setDoubleValue(projectosInvestigadorParticipante);
+                cell11.setDoubleValue(registoPatenteConcedida);
+                cell12.setDoubleValue(patentesComercializadas);
             }            
             System.out.println("A gravar folha " + ODSFolder+"/"+odsFile);
             outputOds.save(ODSFolder+"/"+odsFile);
